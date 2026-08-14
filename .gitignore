@@ -1,5 +1,7 @@
 # Build
 build
+.vscode
+usbpid-attach
 
 # West files
 .west
