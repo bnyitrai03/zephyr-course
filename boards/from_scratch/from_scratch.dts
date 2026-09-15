@@ -1,0 +1,127 @@
+/dts-v1/;
+
+#include <nxp/mcx/nxp_mcxn23x.dtsi>
+#include "frdm_mcxn236-pinctrl.dtsi"
+
+/ {
+	model = "From Scratch Board";
+	compatible = "iomico,our-board", "nxp,mcxn236";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash;
+		zephyr,flash-controller = &fmu;
+		zephyr,code-partition = &slot0_partition;
+		zephyr,console = &flexcomm4_lpuart4;
+	};
+
+	aliases {
+		led0 = &red_led;
+		led1 = &green_led;
+		led2 = &blue_led;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		green_led: led_1 {
+			gpios = <&gpio4 19 GPIO_ACTIVE_LOW>;
+			label = "Green LED";
+		};
+
+		blue_led: led_2 {
+			gpios = <&gpio4 17 GPIO_ACTIVE_LOW>;
+			label = "Blue LED";
+		};
+
+		red_led: led_3 {
+			gpios = <&gpio4 18 GPIO_ACTIVE_LOW>;
+			label = "Red LED";
+		};
+	};
+};
+
+&sram0 {
+	compatible = "mmio-sram";
+	reg = <0x20000000 DT_SIZE_K(192)>;
+};
+
+// for LED pins
+&gpio4 {
+	status = "okay";
+};
+
+&green_led {
+	status = "okay";
+};
+
+&red_led {
+	status = "okay";
+};
+
+// for UART pins
+&gpio1 {
+	status = "okay";
+};
+
+&flexcomm4 {
+	status = "okay";
+};
+
+&flexcomm4_lpuart4 {
+	status = "okay";
+};
+
+&flexcomm4_lpuart4 {
+	current-speed = <115200>;
+	pinctrl-0 = <&pinmux_flexcomm4_lpuart>;
+	pinctrl-names = "default";
+};
+
+/* The MCXN236 can use ostimer as the kernel timer.
+ * We enable it in the dts, and which specific timer
+ * to use as the system timer can be controlled through
+ * Kconfig option based on application requirements.
+ */
+&os_timer {
+	status = "okay";
+};
+
+&systick {
+	status = "okay";
+};
+
+&flash {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/*
+		 * Partition sizes must be aligned
+		 * to the flash memory sector size of 8KB.
+		 */
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 DT_SIZE_K(80)>;
+		};
+
+		/* For the MCUBoot "upgrade only" method,
+		 * the slot sizes must be equal.
+		 */
+		slot0_partition: partition@14000 {
+			label = "image-0";
+			reg = <0x00014000 DT_SIZE_K(440)>;
+		};
+
+		slot1_partition: partition@84000 {
+			label = "image-1";
+			reg = <0x0084000 DT_SIZE_K(440)>;
+		};
+
+		storage_partition: partition@f0000 {
+			label = "storage";
+			reg = <0x000f0000 DT_SIZE_K(64)>;
+		};
+	};
+};
