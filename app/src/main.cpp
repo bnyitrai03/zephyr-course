@@ -2,6 +2,7 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/logging/log.h>
+#include "my_led.h"
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -23,6 +24,8 @@ int main(void)
         sensor_channel_get(led_sensor, SENSOR_CHAN_ALL, &val);
         LOG_INF("channel_get (LED off)");
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+
+        LOG_INF("dynamic data counter value: %d", increase_counter(led_sensor));
     }
 
     return 0;

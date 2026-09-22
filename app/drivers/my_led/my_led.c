@@ -1,6 +1,7 @@
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/logging/log.h>
+#include "my_led.h"
 
 #define DT_DRV_COMPAT my_led
 LOG_MODULE_REGISTER(my_led, LOG_LEVEL_INF);
@@ -8,6 +9,16 @@ LOG_MODULE_REGISTER(my_led, LOG_LEVEL_INF);
 struct my_led_sensor_config {
     struct gpio_dt_spec led;
 };
+
+struct my_led_sensor_data{
+    int counter;
+};
+
+int increase_counter(const struct device *dev){
+    struct my_led_sensor_data *data = dev->data;
+    data->counter++;
+    return data->counter;
+}
 
 // LED on
 static int my_led_sensor_sample_fetch(const struct device *dev, enum sensor_channel chan){
@@ -55,8 +66,11 @@ static DEVICE_API(sensor, api_iomico_lecture) = {
     static const struct my_led_sensor_config my_led_cfg_##inst = {             \
         .led = GPIO_DT_SPEC_GET(DT_INST_PHANDLE(inst, led), gpios),            \
     };                                                                         \
-    DEVICE_DT_INST_DEFINE(inst, init, NULL, NULL, &my_led_cfg_##inst,          \
-                          POST_KERNEL, CONFIG_SENSOR_INIT_PRIORITY,            \
-                          &api_iomico_lecture);
+    static struct my_led_sensor_data my_led_sensor_data_##inst = {             \
+        .counter = 0                                                           \
+    };                                                                         \
+    DEVICE_DT_INST_DEFINE(inst, init, NULL, &my_led_sensor_data_##inst,        \
+                          &my_led_cfg_##inst, POST_KERNEL,                     \
+                          CONFIG_SENSOR_INIT_PRIORITY, &api_iomico_lecture);
 
 DT_INST_FOREACH_STATUS_OKAY(MY_LED_DEFINE);
