@@ -1,0 +1,9 @@
+description: Simple LED driver
+compatible: "my,led"
+properties:
+  led:
+    type: phandle
+    required: true
+    description: Reference to a LED node
+
+include: base.yaml

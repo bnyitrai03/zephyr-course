@@ -1,5 +1,11 @@
 /{
+	my_led0: my_led {
+		compatible = "my,led";
+		status = "okay";
+		led = <&red_led>;
+	};
+
 	aliases {
-		app-led = &red_led; /* led0 is the red led on my board */
+    		my-led0 = &my_led0;
 	};
 };
