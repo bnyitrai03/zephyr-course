@@ -17,7 +17,7 @@ int main(void)
     }
 
     while(1){
-        sensor_sample_fetch(led_sensor);
+        /* sensor_sample_fetch(led_sensor);
         LOG_INF("sample_fetch (LED on)");
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
 
@@ -25,7 +25,8 @@ int main(void)
         LOG_INF("channel_get (LED off)");
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
 
-        LOG_INF("dynamic data counter value: %d", increase_counter(led_sensor));
+        LOG_INF("dynamic data counter value: %d", increase_counter(led_sensor)); */
+        k_msleep(1000);
     }
 
     return 0;

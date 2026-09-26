@@ -1,4 +1,7 @@
 if(CONFIG_MY_LED)
     target_sources(app PRIVATE my_led.c)
     zephyr_include_directories(../include)
+    if(CONFIG_SHELL)
+        target_sources(app PRIVATE my_driver_shell.c)
+    endif()
 endif()
