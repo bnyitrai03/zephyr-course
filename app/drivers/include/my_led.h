@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-int increase_counter(const struct device *dev);
+int set_counter(const struct device *dev, int val);
 
 #ifdef __cplusplus
 }

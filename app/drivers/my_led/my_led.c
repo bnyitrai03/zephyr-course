@@ -14,9 +14,9 @@ struct my_led_sensor_data{
     int counter;
 };
 
-int increase_counter(const struct device *dev){
+int set_counter(const struct device *dev, int val){
     struct my_led_sensor_data *data = dev->data;
-    data->counter++;
+    data->counter = val;
     return data->counter;
 }
 
