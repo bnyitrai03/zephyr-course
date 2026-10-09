@@ -3,7 +3,6 @@ build
 .vscode
 usbpid-attach
 twister-out.*/
-twister-out/
 
 # West files
 .west
